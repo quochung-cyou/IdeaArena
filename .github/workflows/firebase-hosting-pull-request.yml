@@ -23,5 +23,5 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_IDEAARENA_AB92F }}
-          projectId: ideaarena-ab92f
+          projectId: ideaarena-ab92fFb
           channelId: live

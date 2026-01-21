@@ -15,7 +15,6 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "build",
   },
-  base: "/idea-arena/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
