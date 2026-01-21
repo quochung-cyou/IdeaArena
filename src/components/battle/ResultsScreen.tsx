@@ -39,15 +39,25 @@ export function ResultsScreen({
         // Convert Map to Object for Firestore
         const scoresObject = Object.fromEntries(finalScores);
 
+        // Sanitize results to remove imageUrl
+        const sanitizedResults = allResults.map(result => ({
+          ...result,
+          competitorA: (({ imageUrl, ...rest }) => rest)(result.competitorA),
+          competitorB: (({ imageUrl, ...rest }) => rest)(result.competitorB),
+          winner: (({ imageUrl, ...rest }) => rest)(result.winner),
+          loser: (({ imageUrl, ...rest }) => rest)(result.loser),
+        }));
+
         await addDoc(collection(db, 'arena_results'), {
           arenaId,
           playerName,
-          results: allResults,
+          results: sanitizedResults,
           finalScores: scoresObject,
           completedAt: serverTimestamp()
         });
         setSaveStatus('saved');
       } catch (error) {
+        console.error('Failed to save results:', error);
         setSaveStatus('error');
       }
     };
