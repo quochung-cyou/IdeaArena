@@ -82,7 +82,7 @@ export function CompetitorCard({
           {competitor.title}
         </h2>
         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-          <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
+          <p className="text-muted-foreground text-sm md:text-base leading-relaxed whitespace-pre-wrap">
             {competitor.description}
           </p>
         </div>
