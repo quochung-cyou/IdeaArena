@@ -11,9 +11,11 @@ import { Label } from '@/components/ui/label';
 import { Trash2, Plus, ChevronDown, ChevronUp, LayoutList } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
-import { compressImage } from '@/lib/image-utils';
+import { compressImage, ImageCompressionOptions } from '@/lib/image-utils';
 import { CompetitorCard } from '@/components/battle/CompetitorCard';
 import { Competitor } from '@/types/battle';
+
+type ImageQuality = 'standard' | 'low' | 'lowest';
 
 interface CompetitorItem {
     id: string;
@@ -22,6 +24,8 @@ interface CompetitorItem {
     videoUrl: string;
     imageFile: File | null;
     imageUrl?: string;
+    imageQuality: ImageQuality;
+    useUrl: boolean;
     isCollapsed?: boolean;
 }
 
@@ -38,7 +42,7 @@ export default function CreateArena() {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [items, setItems] = useState<CompetitorItem[]>([
-        { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null, isCollapsed: false }
+        { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null, imageQuality: 'standard', useUrl: false, isCollapsed: false }
     ]);
 
     useEffect(() => {
@@ -70,6 +74,8 @@ export default function CreateArena() {
                             videoUrl: item.videoUrl,
                             imageUrl: item.imageUrl,
                             imageFile: null,
+                            imageQuality: 'standard',
+                            useUrl: !!(!item.imageFile && item.imageUrl && item.imageUrl.startsWith('http')), // Simple heuristic
                             isCollapsed: true
                         }));
                         setItems(loadedItems);
@@ -90,7 +96,7 @@ export default function CreateArena() {
 
 
     const addItem = () => {
-        setItems([...items, { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null, isCollapsed: false }]);
+        setItems([...items, { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null, imageQuality: 'standard', useUrl: false, isCollapsed: false }]);
     };
 
     const toggleCollapse = (id: string, e?: React.MouseEvent) => {
@@ -116,17 +122,36 @@ export default function CreateArena() {
         setItems(items.map(item => item.id === id ? { ...item, [field]: value } : item));
     };
 
-    const handleImageChange = async (id: string, file: File | null) => {
+    const handleImageChange = async (id: string, file: File | null, quality: ImageQuality = 'standard') => {
         if (file) {
             try {
-                const base64 = await compressImage(file);
-                setItems(items.map(item => item.id === id ? { ...item, imageFile: file, imageUrl: base64 } : item));
+                let options: ImageCompressionOptions = { maxDimension: 800, quality: 0.7 };
+
+                if (quality === 'low') {
+                    options = { maxDimension: 600, quality: 0.6 };
+                } else if (quality === 'lowest') {
+                    options = { maxDimension: 400, quality: 0.5 };
+                }
+
+                const base64 = await compressImage(file, options);
+                setItems(items.map(item => item.id === id ? { ...item, imageFile: file, imageUrl: base64, imageQuality: quality } : item));
             } catch (error) {
                 console.error("Error compressing image", error);
                 toast.error("Failed to process image");
             }
         } else {
-            updateItem(id, 'imageFile', null);
+            // If clearing the file
+            setItems(items.map(item => item.id === id ? { ...item, imageFile: null, imageUrl: undefined } : item));
+        }
+    };
+
+    const handleQualityChange = (id: string, quality: ImageQuality) => {
+        const item = items.find(i => i.id === id);
+        if (item && item.imageFile) {
+            handleImageChange(id, item.imageFile, quality);
+        } else {
+            // Just update state if no file yet
+            setItems(items.map(i => i.id === id ? { ...i, imageQuality: quality } : i));
         }
     };
 
@@ -171,9 +196,18 @@ export default function CreateArena() {
             }
 
             navigate(`/manage`);
-        } catch (error) {
+            navigate(`/manage`);
+        } catch (error: any) {
             console.error(error);
-            toast.error("Failed to save arena");
+            const errorMsg = error.message || '';
+            if (errorMsg.includes('exceeds the maximum allowed size')) {
+                toast.error("Arena size too large! Try using 'Lowest' image quality or fewer items.", {
+                    duration: 6000,
+                    description: "The total size of the arena data exceeds the database limit."
+                });
+            } else {
+                toast.error("Failed to save arena. Please try again.");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -363,13 +397,70 @@ export default function CreateArena() {
 
                                                             <div className="grid gap-2">
                                                                 <Label>Image (Auto-compressed)</Label>
-                                                                <div className="flex items-center gap-4">
-                                                                    <Input
-                                                                        type="file"
-                                                                        accept="image/*"
-                                                                        onChange={e => handleImageChange(item.id, e.target.files?.[0] || null)}
-                                                                        className="bg-background cursor-pointer"
-                                                                    />
+                                                                <div className="flex flex-col gap-3">
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <Button
+                                                                            type="button"
+                                                                            variant={!item.useUrl ? "default" : "outline"}
+                                                                            size="sm"
+                                                                            onClick={() => updateItem(item.id, 'useUrl', false)}
+                                                                            className="text-xs h-7"
+                                                                        >
+                                                                            Upload
+                                                                        </Button>
+                                                                        <Button
+                                                                            type="button"
+                                                                            variant={item.useUrl ? "default" : "outline"}
+                                                                            size="sm"
+                                                                            onClick={() => updateItem(item.id, 'useUrl', true)}
+                                                                            className="text-xs h-7"
+                                                                        >
+                                                                            URL
+                                                                        </Button>
+                                                                    </div>
+
+                                                                    {!item.useUrl ? (
+                                                                        <div className="space-y-3">
+                                                                            <div className="flex items-end gap-2">
+                                                                                <div className="flex-1">
+                                                                                    <Input
+                                                                                        type="file"
+                                                                                        accept="image/*"
+                                                                                        onChange={e => handleImageChange(item.id, e.target.files?.[0] || null, item.imageQuality)}
+                                                                                        className="bg-background cursor-pointer"
+                                                                                    />
+                                                                                </div>
+                                                                                <div className="w-[100px]">
+                                                                                    <select
+                                                                                        className="w-full h-10 px-3 py-2 bg-background border rounded-md text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                                                                        value={item.imageQuality}
+                                                                                        onChange={(e) => handleQualityChange(item.id, e.target.value as ImageQuality)}
+                                                                                    >
+                                                                                        <option value="standard">Standard</option>
+                                                                                        <option value="low">Low</option>
+                                                                                        <option value="lowest">Lowest</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="text-xs text-muted-foreground flex items-center justify-between">
+                                                                                <span>
+                                                                                    {item.imageQuality === 'standard' && 'Max 800px, 0.7 Quality'}
+                                                                                    {item.imageQuality === 'low' && 'Max 600px, 0.6 Quality'}
+                                                                                    {item.imageQuality === 'lowest' && 'Max 400px, 0.5 Quality'}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <Input
+                                                                            value={item.imageUrl || ''}
+                                                                            onChange={e => {
+                                                                                updateItem(item.id, 'imageUrl', e.target.value);
+                                                                                updateItem(item.id, 'imageFile', null);
+                                                                            }}
+                                                                            placeholder="https://images.unsplash.com/..."
+                                                                            className="bg-background"
+                                                                        />
+                                                                    )}
                                                                 </div>
                                                                 <p className="text-xs text-muted-foreground p-1 bg-muted rounded border flex items-center gap-2">
                                                                     <span className="text-primary font-bold">INFO:</span>

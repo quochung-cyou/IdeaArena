@@ -2,8 +2,18 @@
  * Compresses an image file and returns a base64 string.
  * Resizes the image to a maximum dimension of 800px and uses JPEG compression with 0.7 quality.
  */
-export const compressImage = (file: File): Promise<string> => {
+export interface ImageCompressionOptions {
+    maxDimension?: number;
+    quality?: number;
+}
+
+/**
+ * Compresses an image file and returns a base64 string.
+ * Resizes the image to a maximum dimension and uses JPEG compression with specified quality.
+ */
+export const compressImage = (file: File, options: ImageCompressionOptions = {}): Promise<string> => {
     return new Promise((resolve, reject) => {
+        const { maxDimension = 800, quality = 0.7 } = options;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
@@ -13,7 +23,6 @@ export const compressImage = (file: File): Promise<string> => {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
-                const maxDimension = 800;
 
                 if (width > height) {
                     if (width > maxDimension) {
@@ -32,8 +41,8 @@ export const compressImage = (file: File): Promise<string> => {
                 const ctx = canvas.getContext('2d');
                 ctx?.drawImage(img, 0, 0, width, height);
 
-                // Compress as JPEG with 0.7 quality
-                const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                // Compress as JPEG with specified quality
+                const base64 = canvas.toDataURL('image/jpeg', quality);
                 resolve(base64);
             };
             img.onerror = (error) => reject(error);
