@@ -1,0 +1,44 @@
+[
+  {
+    "id": "2",
+    "title": "Silent Echo: Pressure Defusal Protocol",
+    "description": "Thể loại: Giải đố tương tác (Co-op Puzzle). Cách chơi: Một người chơi ở trong buồng cách âm để gỡ bom, một người (hoặc khán giả) ở ngoài nhìn mật mã trên màn hình. Người bên trong phải nhìn cử chỉ, khẩu hình của người bên ngoài để nhập mã. Cảm biến nhịp tim sẽ làm rung màn hình hoặc gây nhiễu nếu người chơi quá căng thẳng (nhịp tim cao). Vòng lặp: Nhận thông tin hình thể -> Giải mã bom -> Giữ bình tĩnh để duy trì độ ổn định của thiết bị.",
+    "imageUrl": "hinh2.jpg",
+    "videoUrl": "https://youtu.be/BYunaBkn9Ng?si=bVHnWOepV9U-_Yrp&t=274"
+  },
+  {
+    "id": "5",
+    "title": "Logic Warp: Meta-Shifter",
+    "description": "Thể loại: Giải đố môi trường (Sokoban/Rule-based Puzzle). Cách chơi: Người chơi đẩy các khối chữ chứa luật lệ để thay đổi thuộc tính vật thể. Ví dụ: Đẩy khối [Tường] vào chữ [Đi xuyên] để mở đường, hoặc [C9] vào [Bay] để vượt địa hình. Mục tiêu là tìm đường đến cổng thoát. Vòng lặp: Quan sát vật cản -> Sắp xếp lại quy tắc -> Di chuyển đến đích.",
+    "imageUrl": "hinh5.jpg",
+    "videoUrl": "https://youtu.be/DE8zkSGl4q8?si=ThooG0yVO7stw8WE&t=50"
+  },
+  {
+    "id": "7",
+    "title": "Tactical Grid: Round Decipher",
+    "description": "Thể loại: Giải đố sắp xếp trình tự (Logic Sequencing). Cách chơi: Người chơi được cung cấp các ô hành động (Panels) của một tình huống chiến thuật đang thất bại. Thay vì xếp khối, bạn phải tráo đổi vị trí hoặc xoay các ô hành động đó (ví dụ: Di chuyển -> Dùng kỹ năng -> Check-point) để thay đổi diễn biến cốt truyện và đạt được kết quả chiến thắng. Vòng lặp: Quan sát thất bại -> Sắp xếp lại trình tự hành động -> Nhấn Play để xem kết quả mới.",
+    "imageUrl": "hinh7.jpg",
+    "videoUrl": "https://youtu.be/qi8Mpat_blw?si=bMyvUIs8f5l91bVF&t=491"
+  },
+  {
+    "id": "9",
+    "title": "Velocity Dash: Motion Master",
+    "description": "Thể loại: Vận động (Motion Sensing). Cách chơi: Sử dụng màn hình lớn và camera cảm biến để điều khiển. Người chơi chạy tại chỗ để nhân vật di chuyển, nhảy thật để nhân vật nhảy. Đặc biệt, khi thực hiện các tư thế hình thể đặc trưng (ví dụ: tạo dáng Dash của Jett), nhân vật sẽ kích hoạt kỹ năng tương ứng. Vòng lặp: Quan sát màn hình -> Chuyển động cơ thể -> Vượt vật cản về đích.",
+    "imageUrl": "hinh9.jpg",
+    "videoUrl": "https://youtu.be/irlR1-2B804?si=Nuf7uBlZXOq89Lq_&t=412"
+  },
+  {
+    "id": "10",
+    "title": "Armory Overdrive: Squad Logistics",
+    "description": "Thể loại: Phối hợp thực tế (Physical Co-op) & AR Spectacle. Cách chơi: 3 người chơi tương tác tại các trạm vật lý kết hợp công nghệ NFC và cảm biến. Người chơi sử dụng thẻ NFC hoặc điện thoại cá nhân để 'chạm' vào trạm tương tác: P1 chạm thẻ chọn loại vũ khí; P2 xoay cần gạt vật lý để nạp năng lượng; P3 đập nút bấm khổng lồ để khai hỏa. Hệ thống Camera Top-down quét toàn bộ khu vực booth, sử dụng công nghệ AR để render trực tiếp hình ảnh người chơi vào 'nhà máy vũ khí' ảo trên màn hình lớn cho khán giả theo dõi. Vòng lặp: Nhận đơn hàng -> Tương tác vật lý (Chạm/Xoay/Đập) theo quy trình -> Phối hợp chuyển tài nguyên ảo -> Tiêu diệt mục tiêu.",
+    "imageUrl": "hinh10.jpg",
+    "videoUrl": "https://youtu.be/ULcPJigycbI?si=zRDIy0R6hQc0uyri&t=293"
+  },
+  {
+    "id": "11",
+    "title": "Voice Trigger: Tactical Shout (Event Edition)",
+    "description": "Thể loại: Hành động & Đối kháng bằng giọng nói (Voice-Powered Action). Cách chơi: Tối ưu cho không gian sự kiện với 2 chế độ: 'Sonic Duel' (Đối kháng 1vs1 đẩy cầu năng lượng) hoặc 'Commander & Pilot' (Phối hợp đồng đội). Người chơi dùng khẩu lệnh dứt khoát để tung kỹ năng, cường độ âm thanh (Decibel) quyết định uy lực và hiệu ứng hình ảnh trên màn hình lớn. Điểm nhấn: Booth thiết kế cách âm chuyên dụng, tích hợp hệ thống đo 'Năng lượng chiến binh' và xuất mã QR nhận thẻ chứng nhận cá nhân hóa để check-in mạng xã hội. Vòng lặp: Thách đấu -> Hô khẩu lệnh bùng nổ -> Nhận quà & Vinh danh bảng xếp hạng.",
+    "imageUrl": "hinh11.jpg",
+    "videoUrl": "https://youtube.com/shorts/A6tTW1UiY2w?si=VHKzPkfChG86JiRI"
+  }
+]

@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 15% 8%;
+    --foreground: 40 20% 95%;
+
+    --card: 220 12% 12%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 220 12% 10%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 38 90% 55%;
+    --primary-foreground: 220 15% 8%;
+
+    --secondary: 220 12% 18%;
+    --secondary-foreground: 40 20% 85%;
+
+    --muted: 220 10% 20%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 38 80% 50%;
+    --accent-foreground: 220 15% 8%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 40 20% 95%;
+
+    --border: 220 10% 20%;
+    --input: 220 10% 25%;
+    --ring: 38 90% 55%;
+
+    --radius: 0.5rem;
+
+    /* Battle arena specific tokens */
+    --arena-glow: 38 90% 55%;
+    --arena-surface: 220 12% 14%;
+    --arena-surface-hover: 220 12% 18%;
+    --arena-divider: 220 10% 25%;
+    --arena-text-dim: 220 10% 45%;
+    --arena-slider-track: 220 10% 22%;
+    --arena-slider-active: 38 85% 52%;
+    --arena-winner: 142 60% 45%;
+    --arena-loser: 0 50% 45%;
+  }
+
+  .dark {
+    --background: 220 15% 8%;
+    --foreground: 40 20% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .arena-container {
+    @apply min-h-screen bg-background;
+    background-image: 
+      radial-gradient(ellipse at 50% 0%, hsl(var(--arena-glow) / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, hsl(var(--arena-glow) / 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, hsl(var(--arena-glow) / 0.04) 0%, transparent 40%);
+  }
+
+  .arena-card {
+    @apply bg-card border border-border rounded-lg overflow-hidden;
+    box-shadow: 
+      0 4px 6px -1px hsl(0 0% 0% / 0.3),
+      0 2px 4px -2px hsl(0 0% 0% / 0.2),
+      inset 0 1px 0 0 hsl(var(--foreground) / 0.03);
+  }
+
+  .arena-card-active {
+    @apply arena-card;
+    box-shadow: 
+      0 0 0 1px hsl(var(--primary) / 0.3),
+      0 4px 20px -4px hsl(var(--primary) / 0.2),
+      0 8px 30px -8px hsl(0 0% 0% / 0.4);
+  }
+
+  .arena-input {
+    @apply bg-input border border-border text-foreground placeholder:text-muted-foreground;
+    @apply px-4 py-3 rounded-md outline-none transition-all duration-200;
+    @apply focus:ring-2 focus:ring-primary/30 focus:border-primary;
+  }
+
+  .arena-button {
+    @apply bg-primary text-primary-foreground font-medium;
+    @apply px-6 py-3 rounded-md transition-all duration-200;
+    @apply hover:brightness-110 active:scale-[0.98];
+    @apply disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .arena-button-ghost {
+    @apply bg-transparent text-foreground border border-border;
+    @apply px-6 py-3 rounded-md transition-all duration-200;
+    @apply hover:bg-secondary hover:border-muted-foreground/30;
+  }
+
+  .arena-slider-track {
+    @apply h-2 rounded-full;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--arena-slider-active)) 0%,
+      hsl(var(--arena-slider-track)) 50%,
+      hsl(var(--arena-slider-active)) 100%
+    );
+  }
+
+  .arena-versus {
+    @apply text-muted-foreground font-bold text-lg tracking-widest uppercase;
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  .arena-title {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    @apply text-foreground tracking-tight;
+  }
+
+  .arena-badge {
+    @apply text-xs font-medium uppercase tracking-wider px-2 py-1 rounded;
+    @apply bg-secondary text-secondary-foreground;
+  }
+
+  .arena-badge-winner {
+    @apply arena-badge;
+    background: hsl(var(--arena-winner) / 0.2);
+    color: hsl(var(--arena-winner));
+  }
+
+  .arena-badge-loser {
+    @apply arena-badge;
+    background: hsl(var(--arena-loser) / 0.2);
+    color: hsl(var(--arena-loser));
+  }
+}

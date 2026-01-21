@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function getArenaData(arenaId) {
+      return get(/databases/$(database)/documents/arenas/$(arenaId)).data;
+    }
+
+    match /arenas/{arenaId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && request.auth.uid == resource.data.createdBy;
+      allow delete: if false;
+    }
+    
+    match /arena_results/{resultId} {
+      allow read: if getArenaData(resource.data.arenaId).createdBy == request.auth.uid || 
+                     getArenaData(resource.data.arenaId).publicResults == true;
+                     
+      allow create: if getArenaData(request.resource.data.arenaId).isOpen == true;
+      
+      allow delete: if getArenaData(resource.data.arenaId).createdBy == request.auth.uid;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "title": "C9 Legacy Echo: The Highlight Mimic",
+    "description": "Thể loại: Mô phỏng hành động (Action Imitation). Cách chơi: Người chơi xem một đoạn clip ngắn (3-5 giây) về pha xử lý của tuyển thủ C9. Sau đó, trong môi trường 3D, người chơi phải điều khiển nhân vật di chuyển đúng lộ trình và tung kỹ năng đúng thời điểm như trong clip. Hệ thống tính điểm dựa trên độ khớp (Sync Rate) giữa hành động của người chơi và dữ liệu gốc. Vòng lặp: Xem clip -> Tái hiện hành động -> Nhận điểm và sửa lỗi.",
+    "imageUrl": "hinh1.jpg"
+  },
+  {
+    "id": "2",
+    "title": "Silent Echo: Pressure Defusal Protocol",
+    "description": "Thể loại: Giải đố tương tác (Co-op Puzzle). Cách chơi: Một người chơi ở trong buồng cách âm để gỡ bom, một người (hoặc khán giả) ở ngoài nhìn mật mã trên màn hình. Người bên trong phải nhìn cử chỉ, khẩu hình của người bên ngoài để nhập mã. Cảm biến nhịp tim sẽ làm rung màn hình hoặc gây nhiễu nếu người chơi quá căng thẳng (nhịp tim cao). Vòng lặp: Nhận thông tin hình thể -> Giải mã bom -> Giữ bình tĩnh để duy trì độ ổn định của thiết bị.",
+    "imageUrl": "hinh2.jpg",
+    "videoUrl": "https://youtu.be/BYunaBkn9Ng?si=bVHnWOepV9U-_Yrp&t=274"
+  },
+  {
+    "id": "3",
+    "title": "Cloud9 Momentum: Kinetic Synchronizer",
+    "description": "Thể loại: Vận động nhóm (Physical Co-op). Cách chơi: Nhóm 5-10 người đứng trên bàn cảm ứng lực. Để điều khiển xe bus trên màn hình né chướng ngại vật, cả nhóm phải cùng nghiêng người sang trái/phải hoặc cùng nhảy lên để xe vượt hố. Nếu chỉ một người làm sai nhịp, xe sẽ mất thăng bằng hoặc giảm tốc độ. Vòng lặp: Quan sát địa hình -> Cả nhóm đồng bộ chuyển động -> Vượt qua quãng đường dài nhất có thể.",
+    "imageUrl": "hinh3.jpg"
+  },
+  {
+    "id": "4",
+    "title": "Agent Pose: Silhouette Master",
+    "description": "Thể loại: Bắt chước hình thể (Pose Matching). Cách chơi: Camera quét khung xương người chơi. Màn hình xuất hiện các bóng nhân vật với tư thế đặc trưng. Người chơi có 2 giây để tạo dáng khớp hoàn toàn vào cái bóng đó. Độ khó tăng dần bằng cách đẩy nhanh tốc độ xuất hiện và độ phức tạp của tư thế. Vòng lặp: Nhìn bóng -> Tạo dáng -> Kiểm tra độ khớp xương (Joint matching).",
+    "imageUrl": "hinh4.jpg"
+  },
+  {
+    "id": "5",
+    "title": "Logic Warp: Meta-Shifter",
+    "description": "Thể loại: Giải đố môi trường (Sokoban/Rule-based Puzzle). Cách chơi: Người chơi đẩy các khối chữ chứa luật lệ để thay đổi thuộc tính vật thể. Ví dụ: Đẩy khối [Tường] vào chữ [Đi xuyên] để mở đường, hoặc [C9] vào [Bay] để vượt địa hình. Mục tiêu là tìm đường đến cổng thoát. Vòng lặp: Quan sát vật cản -> Sắp xếp lại quy tắc -> Di chuyển đến đích.",
+    "imageUrl": "hinh5.jpg",
+    "videoUrl": "https://youtu.be/DE8zkSGl4q8?si=ThooG0yVO7stw8WE&t=50"
+  },
+  {
+    "id": "7",
+    "title": "Tactical Grid: Round Decipher",
+    "description": "Thể loại: Xếp hình chiến thuật (Resource Tetris). Cách chơi: Các khối hình đại diện cho 'Kinh tế', 'Kỹ năng', 'Vị trí' rơi xuống. Người chơi phải xếp chúng vào các ô trống của một sơ đồ chiến thuật có sẵn. Hoàn thành một hàng ngang sẽ kích hoạt một hiệu ứng hỗ trợ (Utility). Game kết thúc nếu khối hình chồng cao quá giới hạn. Vòng lặp: Sắp xếp tài nguyên -> Hoàn thành sơ đồ -> Xử lý áp lực tốc độ.",
+    "imageUrl": "hinh7.jpg",
+    "videoUrl": "https://youtu.be/qi8Mpat_blw?si=bMyvUIs8f5l91bVF&t=491"
+  },
+  {
+    "id": "8",
+    "title": "Pentakill Protocol: Micro-Manager",
+    "description": "Thể loại: Quản lý đa nhiệm (Real-time Micro). Cách chơi: Người chơi điều khiển 5 biểu tượng Agent cùng lúc trên mini-map. Các Agent tự động tiến về phía địch, người chơi phải nhấn lệnh 'Dừng', 'Né' hoặc 'Dùng chiêu' cho từng Agent để phối hợp combo hoặc tránh luồng đạn. Mục tiêu là tiêu diệt hết mục tiêu mà không để Agent nào nằm xuống. Vòng lặp: Quan sát toàn cảnh -> Ra lệnh đơn lẻ cho từng đơn vị -> Quét sạch mục tiêu.",
+    "imageUrl": "hinh8.jpg"
+  },
+  {
+    "id": "9",
+    "title": "Velocity Dash: Motion Master",
+    "description": "Thể loại: Vận động (Motion Sensing). Cách chơi: Sử dụng màn hình lớn và camera cảm biến để điều khiển. Người chơi chạy tại chỗ để nhân vật di chuyển, nhảy thật để nhân vật nhảy. Đặc biệt, khi thực hiện các tư thế hình thể đặc trưng (ví dụ: tạo dáng Dash của Jett), nhân vật sẽ kích hoạt kỹ năng tương ứng. Vòng lặp: Quan sát màn hình -> Chuyển động cơ thể -> Vượt vật cản về đích.",
+    "imageUrl": "hinh9.jpg",
+    "videoUrl": "https://youtu.be/irlR1-2B804?si=Nuf7uBlZXOq89Lq_&t=412"
+  },
+  {
+    "id": "10",
+    "title": "Armory Overdrive: Squad Logistics",
+    "description": "Thể loại: Phối hợp quy trình (Multiplayer Tasking). Cách chơi: 3 người chơi đảm nhận 3 khâu khác nhau: Người chọn vũ khí, Người nạp năng lượng, Người bắn mục tiêu. Mỗi mục tiêu yêu cầu một bộ 'nguyên liệu' cụ thể (Súng A + Kỹ năng B). 3 người phải bấm nút chuyển tài nguyên cho nhau đúng thứ tự để người cuối cùng có đủ đạn dược bắn hạ mục tiêu. Vòng lặp: Nhận đơn hàng -> Phối hợp chuyển tài nguyên -> Tiêu diệt mục tiêu.",
+    "imageUrl": "hinh10.jpg",
+    "videoUrl": "https://youtu.be/ULcPJigycbI?si=zRDIy0R6hQc0uyri&t=293"
+  },
+  {
+    "id": "11",
+    "title": "Voice Trigger: Tactical Shout",
+    "description": "Thể loại: Hành động bằng giọng nói (Voice Command). Cách chơi: Người chơi dùng giọng nói để điều khiển nhân vật thay vì phím bấm. Hô 'Bắn' để tấn công, 'Né' để di chuyển. Cường độ âm thanh (to/nhỏ) và độ dứt khoát của khẩu lệnh sẽ quyết định uy lực của kỹ năng trong game. Vòng lặp: Nhận diện tình huống -> Hô khẩu lệnh -> Quan sát kết quả trên màn hình.",
+    "imageUrl": "hinh11.jpg",
+    "videoUrl": "https://youtube.com/shorts/A6tTW1UiY2w?si=VHKzPkfChG86JiRI"
+  }
+]
