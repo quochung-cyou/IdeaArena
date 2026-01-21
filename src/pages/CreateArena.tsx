@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, ChevronDown, ChevronUp, LayoutList } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { compressImage } from '@/lib/image-utils';
@@ -22,6 +22,7 @@ interface CompetitorItem {
     videoUrl: string;
     imageFile: File | null;
     imageUrl?: string;
+    isCollapsed?: boolean;
 }
 
 import { AreaTopBar } from '@/components/navigation/AreaTopBar';
@@ -37,7 +38,7 @@ export default function CreateArena() {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [items, setItems] = useState<CompetitorItem[]>([
-        { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null }
+        { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null, isCollapsed: false }
     ]);
 
     useEffect(() => {
@@ -68,7 +69,8 @@ export default function CreateArena() {
                             description: item.description,
                             videoUrl: item.videoUrl,
                             imageUrl: item.imageUrl,
-                            imageFile: null
+                            imageFile: null,
+                            isCollapsed: true
                         }));
                         setItems(loadedItems);
                     } else {
@@ -88,7 +90,20 @@ export default function CreateArena() {
 
 
     const addItem = () => {
-        setItems([...items, { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null }]);
+        setItems([...items, { id: uuidv4(), title: '', description: '', videoUrl: '', imageFile: null, isCollapsed: false }]);
+    };
+
+    const toggleCollapse = (id: string, e?: React.MouseEvent) => {
+        e?.stopPropagation();
+        setItems(items.map(item => item.id === id ? { ...item, isCollapsed: !item.isCollapsed } : item));
+    };
+
+    const scrollToItem = (id: string) => {
+        const element = document.getElementById(`competitor-${id}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setItems(prev => prev.map(item => item.id === id ? { ...item, isCollapsed: false } : item));
+        }
     };
 
     const removeItem = (id: string) => {
@@ -171,145 +186,247 @@ export default function CreateArena() {
     return (
         <div className="min-h-screen bg-background pb-12">
             <AreaTopBar title={isEditMode ? 'Edit Arena' : 'Create New Arena'} onBack={() => navigate('/manage')} />
-            <div className="container mx-auto p-4 max-w-5xl">
 
-                <div className="space-y-8">
-                    <Card className="border-2">
-                        <CardHeader>
-                            <CardTitle>Arena Details</CardTitle>
-                            {isEditMode && id && (
-                                <div className="mt-2 p-3 bg-muted rounded-md flex items-center justify-between">
-                                    <div className="flex flex-col">
-                                        <span className="text-xs font-mono text-muted-foreground uppercase">Arena ID</span>
-                                        <span className="font-mono font-bold text-lg select-all">{id}</span>
-                                    </div>
-                                    <div className="text-xs text-muted-foreground text-right">
-                                        You are editing an existing arena.
-                                    </div>
+            <div className="container mx-auto p-4 max-w-6xl">
+                <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 items-start">
+
+                    <aside className="hidden lg:block sticky top-24 space-y-6">
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider px-2">Quick Navigation</h3>
+                            <nav className="space-y-1">
+                                <Button
+                                    variant="ghost"
+                                    className="w-full justify-start text-left font-normal"
+                                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                >
+                                    <LayoutList className="mr-2 h-4 w-4" />
+                                    Arena Details
+                                </Button>
+                                <div className="pt-2 pb-1 px-2 text-xs font-medium text-muted-foreground">Competitors</div>
+                                <div className="max-h-[60vh] overflow-y-auto pr-2 space-y-1 scrollbar-thin">
+                                    {items.map((item, index) => (
+                                        <Button
+                                            key={item.id}
+                                            variant="ghost"
+                                            className={`w-full justify-start text-left text-sm h-auto py-2 ${!item.isCollapsed ? 'bg-accent/50 text-accent-foreground' : 'text-muted-foreground'}`}
+                                            onClick={() => scrollToItem(item.id)}
+                                        >
+                                            <span className="mr-2 opacity-50 font-mono text-xs">#{index + 1}</span>
+                                            <span className="truncate">{item.title || '(Untitled)'}</span>
+                                        </Button>
+                                    ))}
                                 </div>
-                            )}
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid w-full gap-1.5">
-                                <Label htmlFor="title" className="text-base">Arena Title</Label>
-                                <Input
-                                    id="title"
-                                    value={title}
-                                    onChange={e => setTitle(e.target.value)}
-                                    placeholder="e.g., Best UI Framework 2026"
-                                    className="text-lg"
-                                />
-                            </div>
-                            <div className="grid w-full gap-1.5">
-                                <Label htmlFor="description">Description</Label>
-                                <Textarea
-                                    id="description"
-                                    value={description}
-                                    onChange={e => setDescription(e.target.value)}
-                                    placeholder="What is this battle about?"
-                                    rows={3}
-                                />
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center bg-muted/30 p-4 rounded-lg">
-                            <div>
-                                <h2 className="text-2xl font-bold">Competitors</h2>
-                                <p className="text-muted-foreground text-sm">Add at least 2 competitors for the arena.</p>
-                            </div>
-                            <Button onClick={addItem} size="lg"><Plus className="mr-2 h-5 w-5" /> Add Competitor</Button>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start text-left mt-4 border-dashed"
+                                    onClick={addItem}
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Add New
+                                </Button>
+                            </nav>
                         </div>
+                    </aside>
 
-                        <div className="grid grid-cols-1 gap-8">
-                            {items.map((item, index) => (
-                                <Card key={item.id} className="overflow-hidden border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow">
-                                    <CardContent className="p-0">
-                                        <div className="flex flex-col lg:flex-row">
-                                            {/* Input Section */}
-                                            <div className="flex-1 p-6 space-y-4 border-b lg:border-b-0 lg:border-r border-border bg-card">
-                                                <div className="flex justify-between items-start">
-                                                    <h3 className="font-semibold text-lg text-muted-foreground">Competitor #{index + 1}</h3>
+                    <div className="space-y-8 min-w-0">
+                        <Card className="border-2 shadow-sm">
+                            <CardHeader>
+                                <CardTitle className="text-2xl">Arena Details</CardTitle>
+                                {isEditMode && id && (
+                                    <div className="mt-2 p-3 bg-muted rounded-md flex items-center justify-between border">
+                                        <div className="flex flex-col">
+                                            <span className="text-xs font-mono text-muted-foreground uppercase">Arena ID</span>
+                                            <span className="font-mono font-bold text-lg select-all">{id}</span>
+                                        </div>
+                                        <div className="text-xs text-muted-foreground text-right bg-background px-2 py-1 rounded border">
+                                            Editing Mode
+                                        </div>
+                                    </div>
+                                )}
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                <div className="grid w-full gap-2">
+                                    <Label htmlFor="title" className="text-base font-semibold">Arena Title</Label>
+                                    <Input
+                                        id="title"
+                                        value={title}
+                                        onChange={e => setTitle(e.target.value)}
+                                        placeholder="e.g., Best UI Framework 2026"
+                                        className="text-lg h-12"
+                                    />
+                                </div>
+                                <div className="grid w-full gap-2">
+                                    <Label htmlFor="description" className="font-semibold">Description</Label>
+                                    <Textarea
+                                        id="description"
+                                        value={description}
+                                        onChange={e => setDescription(e.target.value)}
+                                        placeholder="What is this battle about?"
+                                        rows={9}
+                                        className="resize-y min-h-[400px]"
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-end border-b pb-2">
+                                <div>
+                                    <h2 className="text-2xl font-bold flex items-center gap-2">
+                                        Competitors
+                                        <span className="text-sm font-normal text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{items.length}</span>
+                                    </h2>
+                                    <p className="text-muted-foreground text-sm mt-1">Add at least 2 competitors for the arena.</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                {items.map((item, index) => (
+                                    <div key={item.id} id={`competitor-${item.id}`} className="scroll-mt-28">
+                                        <Card className={`overflow-hidden transition-all duration-300 border-l-4 ${!item.isCollapsed ? 'border-l-primary shadow-lg ring-1 ring-primary/5' : 'border-l-muted-foreground/30 shadow-sm opacity-90 hover:opacity-100'}`}>
+                                            <div
+                                                className="bg-card p-4 flex items-center justify-between cursor-pointer hover:bg-muted/5 transition-colors select-none border-b"
+                                                onClick={() => toggleCollapse(item.id)}
+                                            >
+                                                <div className="flex items-center gap-4 overflow-hidden">
+                                                    <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${!item.isCollapsed ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                                                        {index + 1}
+                                                    </div>
+                                                    <div className="flex flex-col min-w-0">
+                                                        <h3 className={`font-semibold text-lg truncate ${!item.title && 'text-muted-foreground italic'}`}>
+                                                            {item.title || 'Untitled Competitor'}
+                                                        </h3>
+                                                        {item.isCollapsed && item.description && (
+                                                            <p className="text-xs text-muted-foreground truncate max-w-[300px]">{item.description}</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="text-muted-foreground"
+                                                        onClick={(e) => toggleCollapse(item.id, e)}
+                                                    >
+                                                        {item.isCollapsed ? <ChevronDown className="h-5 w-5" /> : <ChevronUp className="h-5 w-5" />}
+                                                    </Button>
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="text-destructive hover:bg-destructive/10 -mt-1 -mr-2"
-                                                        onClick={() => removeItem(item.id)}
+                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            removeItem(item.id);
+                                                        }}
                                                         disabled={items.length <= 2}
+                                                        title="Remove competitor"
                                                     >
-                                                        <Trash2 className="h-5 w-5" />
+                                                        <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
-
-                                                <div className="grid gap-2">
-                                                    <Label>Name</Label>
-                                                    <Input
-                                                        value={item.title}
-                                                        onChange={e => updateItem(item.id, 'title', e.target.value)}
-                                                        placeholder="e.g. React.js"
-                                                    />
-                                                </div>
-
-                                                <div className="grid gap-2">
-                                                    <Label>Description</Label>
-                                                    <Textarea
-                                                        value={item.description}
-                                                        onChange={e => updateItem(item.id, 'description', e.target.value)}
-                                                        placeholder="Why is it a strong contender?"
-                                                        rows={3}
-                                                    />
-                                                </div>
-
-                                                <div className="grid gap-2">
-                                                    <Label>Reference Link</Label>
-                                                    <Input
-                                                        value={item.videoUrl}
-                                                        onChange={e => updateItem(item.id, 'videoUrl', e.target.value)}
-                                                        placeholder="https://..."
-                                                    />
-                                                </div>
-
-                                                <div className="grid gap-2">
-                                                    <Label>Image (Auto-compressed)</Label>
-                                                    <Input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={e => handleImageChange(item.id, e.target.files?.[0] || null)}
-                                                    />
-                                                    <p className="text-xs text-muted-foreground">Images are automatically resized and compressed for fast loading.</p>
-                                                </div>
                                             </div>
 
-                                            {/* Preview Section */}
-                                            <div className="flex-1 bg-muted/10 p-6 flex flex-col justify-center items-center">
-                                                <div className="w-full max-w-md">
-                                                    <Label className="mb-2 block text-center text-muted-foreground uppercase tracking-widest text-xs">Preview Card</Label>
-                                                    <div className="transform scale-90 sm:scale-100 transition-transform origin-top">
-                                                        <CompetitorCard
-                                                            competitor={{
-                                                                id: item.id,
-                                                                title: item.title || 'Untitled',
-                                                                description: item.description || 'No description provided.',
-                                                                imageUrl: item.imageUrl,
-                                                                videoUrl: item.videoUrl
-                                                            }}
-                                                            side="left"
-                                                            isActive={true}
-                                                        />
+                                            {!item.isCollapsed && (
+                                                <CardContent className="p-0 animate-in fade-in slide-in-from-top-2 duration-200">
+                                                    <div className="flex flex-col xl:flex-row divide-y xl:divide-y-0 xl:divide-x divide-border">
+                                                        <div className="flex-1 p-6 space-y-6 bg-card/50">
+                                                            <div className="grid gap-2">
+                                                                <Label className="text-foreground">Name <span className="text-destructive">*</span></Label>
+                                                                <Input
+                                                                    value={item.title}
+                                                                    onChange={e => updateItem(item.id, 'title', e.target.value)}
+                                                                    placeholder="e.g. React.js"
+                                                                    className="bg-background"
+                                                                />
+                                                            </div>
+
+                                                            <div className="grid gap-2">
+                                                                <Label>Description</Label>
+                                                                <Textarea
+                                                                    value={item.description}
+                                                                    onChange={e => updateItem(item.id, 'description', e.target.value)}
+                                                                    placeholder="Why is it a strong contender?"
+                                                                    rows={8}
+                                                                    className="bg-background min-h-[160px]"
+                                                                />
+                                                            </div>
+
+                                                            <div className="grid gap-2">
+                                                                <Label>Reference Link / Video</Label>
+                                                                <Input
+                                                                    value={item.videoUrl}
+                                                                    onChange={e => updateItem(item.id, 'videoUrl', e.target.value)}
+                                                                    placeholder="https://youtube.com/..."
+                                                                    className="bg-background"
+                                                                />
+                                                            </div>
+
+                                                            <div className="grid gap-2">
+                                                                <Label>Image (Auto-compressed)</Label>
+                                                                <div className="flex items-center gap-4">
+                                                                    <Input
+                                                                        type="file"
+                                                                        accept="image/*"
+                                                                        onChange={e => handleImageChange(item.id, e.target.files?.[0] || null)}
+                                                                        className="bg-background cursor-pointer"
+                                                                    />
+                                                                </div>
+                                                                <p className="text-xs text-muted-foreground p-1 bg-muted rounded border flex items-center gap-2">
+                                                                    <span className="text-primary font-bold">INFO:</span>
+                                                                    Images are automatically resized and compressed.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex-1 bg-muted/20 p-6 flex flex-col items-center justify-start gap-4">
+                                                            <div className="w-full flex items-center justify-between text-xs text-muted-foreground uppercase tracking-wider px-1">
+                                                                <span>Live Preview</span>
+                                                            </div>
+                                                            <div className="w-full max-w-[340px] shadow-2xl rounded-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
+                                                                <CompetitorCard
+                                                                    competitor={{
+                                                                        id: item.id,
+                                                                        title: item.title || 'Untitled',
+                                                                        description: item.description || 'No description provided.',
+                                                                        imageUrl: item.imageUrl,
+                                                                        videoUrl: item.videoUrl
+                                                                    }}
+                                                                    side="left"
+                                                                    isActive={true}
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
+                                                </CardContent>
+                                            )}
+                                        </Card>
+                                    </div>
+                                ))}
 
-                        <div className="flex justify-end pt-8 pb-12 sticky bottom-0 bg-gradient-to-t from-background via-background to-transparent p-4 z-10">
-                            <Button size="lg" className="px-8 shadow-lg" onClick={handleSubmit} disabled={isLoading}>
-                                {isLoading ? 'Saving Arena...' : (isEditMode ? 'Update Arena' : 'Create Arena')}
-                            </Button>
+                                <Button
+                                    onClick={addItem}
+                                    variant="outline"
+                                    className="w-full py-8 border-dashed border-2 hover:border-primary hover:bg-primary/5 hover:text-primary transition-all group text-lg font-medium"
+                                >
+                                    <Plus className="mr-2 h-6 w-6 group-hover:scale-110 transition-transform" />
+                                    Add Another Competitor
+                                </Button>
+                            </div>
+
+                            <div className="flex justify-end pt-8 pb-12 sticky bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 z-10 border-t mt-8">
+                                <div className="flex gap-4">
+                                    <Button variant="outline" size="lg" onClick={() => navigate('/manage')}>
+                                        Cancel
+                                    </Button>
+                                    <Button size="lg" className="px-8 shadow-lg min-w-[200px]" onClick={handleSubmit} disabled={isLoading}>
+                                        {isLoading ? (
+                                            <>Saving...</>
+                                        ) : (
+                                            isEditMode ? 'Update Arena' : 'Create Arena'
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
